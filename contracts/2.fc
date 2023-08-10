@@ -1,3 +1,6 @@
+(int) tlen (tuple t) asm "TLEN";
+forall X -> (tuple, X) ~tpop (tuple t) asm "TPOP";
+
 {-
   TASK 2 - Matrix multiplier
   Write the method that multiplies one matrix by another.
