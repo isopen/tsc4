@@ -24,7 +24,7 @@
   elseif (k < 0) {
     return empty_tuple();
   }
-  elseif (n + k > 370) {
+  elseif (n + k > 369) {
     return empty_tuple();
   }
   elseif (k > 255) {
