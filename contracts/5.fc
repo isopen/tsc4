@@ -1,5 +1,3 @@
- #include "imports/stdlib.fc";
-
 () recv_internal() {
 }
 
