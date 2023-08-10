@@ -18,21 +18,11 @@
 
 ;; testable
 (tuple) fibonacci_sequence (int n, int k) method_id {
-  if(n < 0) {
-    return empty_tuple();
-  }
-  elseif (k < 0) {
-    return null();
-  }
-  elseif (n + k > 369) {
-    return null();
-  }
-  elseif (k > 255) {
-    return null();
-  }
-  elseif (n > 369) {
-    return null();
-  }
+  throw_if(5, n < 0);
+  throw_if(5, k < 0);
+  throw_if(5, n > 369);
+  throw_if(5, k > 255);
+  throw_if(5, n + k > 369);
 
   tuple fib = empty_tuple();
   int f0 = 0;
