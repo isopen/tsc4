@@ -31,7 +31,7 @@
     return empty_tuple();
   }
   elseif (n > 370) {
-    return null();
+    return empty_tuple();
   }
 
   tuple fib = empty_tuple();
