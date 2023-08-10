@@ -14,6 +14,41 @@
 
 ;; testable
 (tuple) matrix_multiplier(tuple matrixA, tuple matrixB) method_id {
-  return null();
+  int rowsA = matrixA.tlen();
+  int colsA = matrixA.at(0).tlen();
+  int rowsB = matrixB.tlen();
+  int colsB = matrixB.at(0).tlen();
+
+  throw_if(5, rowsA < 5);
+  throw_if(5, colsA < 5);
+  throw_if(5, rowsA > 31);
+  throw_if(5, colsA > 31);
+  throw_if(5, rowsB < 5);
+  throw_if(5, colsB < 5);
+  throw_if(5, rowsB > 31);
+  throw_if(5, colsB > 31);
+  throw_if(5, colsA != rowsB);
+
+  tuple result = empty_tuple();
+
+  int i = 0;
+  while (i < rowsA) {
+    tuple tmp = empty_tuple();
+    int j = 0;
+    while (j < colsB) {
+      int sum = 0;
+      int k = 0;
+      while (k < colsA) {
+        sum += matrixA.at(i).at(k) * matrixB.at(k).at(j);
+        k += 1;
+      }
+      tmp~tpush(sum);
+      j += 1;
+    }
+    result~tpush(tmp);
+    i += 1;
+  }
+
+  return result;
 }
 
