@@ -22,13 +22,13 @@
     return null();
   }
   elseif (k < 0) {
-    return null();
+    return empty_tuple();
   }
   elseif (n + k > 370) {
-    return null();
+    return empty_tuple();
   }
   elseif (k > 255) {
-    return null();
+    return empty_tuple();
   }
 
   tuple fib = empty_tuple();
