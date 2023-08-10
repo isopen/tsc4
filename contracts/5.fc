@@ -19,33 +19,33 @@
 ;; testable
 (tuple) fibonacci_sequence (int n, int k) method_id {
   if(n < 0) {
-        return null();
-    }
-    elseif (k < 0) {
-        return null();
-    }
-    elseif (n + k > 370) {
-        return null();
-    }
-    elseif (k > 255) {
-        return null();
-    }
+    return null();
+  }
+  elseif (k < 0) {
+    return null();
+  }
+  elseif (n + k > 370) {
+    return null();
+  }
+  elseif (k > 255) {
+    return null();
+  }
 
-    tuple fib = empty_tuple();
-    int f0 = 0;
-    int f1 = 1;
-    int temp = 0;
-    int i = 0;
-    while (i < n + k) {
-        if (i >= n) {
-            fib~tpush(f0);
-        }
-        temp = f0 + f1;
-        f0 = f1;
-        f1 = temp;
-        i += 1;
+  tuple fib = empty_tuple();
+  int f0 = 0;
+  int f1 = 1;
+  int temp = 0;
+  int i = 0;
+  while (i < n + k) {
+    if (i >= n) {
+      fib~tpush(f0);
     }
+    temp = f0 + f1;
+    f0 = f1;
+    f1 = temp;
+    i += 1;
+  }
 
-    return fib;
+  return fib;
 }
 
