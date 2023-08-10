@@ -22,16 +22,16 @@
     return empty_tuple();
   }
   elseif (k < 0) {
-    return empty_tuple();
+    return null();
   }
   elseif (n + k > 369) {
-    return empty_tuple();
+    return null();
   }
   elseif (k > 255) {
-    return empty_tuple();
+    return null();
   }
   elseif (n > 369) {
-    return empty_tuple();
+    return null();
   }
 
   tuple fib = empty_tuple();
