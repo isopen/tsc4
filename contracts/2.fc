@@ -21,15 +21,33 @@
     int rowsB = matrixB.tlen();
     int colsB = matrixB.at(0).tlen();
 
-    throw_if(5, rowsA < 5);
-    throw_if(5, colsA < 5);
-    throw_if(5, rowsA > 31);
-    throw_if(5, colsA > 31);
-    throw_if(5, rowsB < 5);
-    throw_if(5, colsB < 5);
-    throw_if(5, rowsB > 31);
-    throw_if(5, colsB > 31);
-    throw_if(5, colsA != rowsB);
+    if (rowsA < 5) {
+      return empty_tuple();
+    }
+    elseif (colsA < 5) {
+      return empty_tuple();
+    }
+    elseif (rowsA > 31) {
+      return empty_tuple();
+    }
+    elseif (colsA > 31) {
+      return empty_tuple();
+    }
+    elseif (rowsB < 5) {
+      return empty_tuple();
+    }
+    elseif (colsB < 5) {
+      return empty_tuple();
+    }
+    elseif (rowsB > 31) {
+      return empty_tuple();
+    }
+    elseif (colsB > 31) {
+      return empty_tuple();
+    }
+    elseif (colsA != rowsB) {
+      return empty_tuple();
+    }
 
     tuple result = empty_tuple();
 
