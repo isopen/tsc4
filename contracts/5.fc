@@ -24,10 +24,10 @@
   elseif (k < 0) {
     return empty_tuple();
   }
-  elseif (n + k > 369) {
+  elseif (n + k > 371) {
     return empty_tuple();
   }
-  elseif (n > 369) {
+  elseif (n > 371) {
     return empty_tuple();
   }
   elseif (k > 255) {
