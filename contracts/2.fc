@@ -11,6 +11,15 @@
 
 (int) tlen (tuple t) asm "TLEN";
 
+(tuple) reverse_tuple(tuple t1) {
+    tuple t2 = empty_tuple();
+    repeat (t1.tlen()) {
+        var value = t1~tpop();
+        t2~tpush(value);
+    }
+    return t2;
+}
+
 () recv_internal() {
 }
 
@@ -65,7 +74,7 @@
             tmp~tpush(sum);
             j += 1;
         }
-        result~tpush(tmp);
+        result~tpush(reverse_tuple(tmp));
         i += 1;
     }
     
