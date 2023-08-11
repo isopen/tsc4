@@ -10,6 +10,7 @@
 -}
 
 (int) tlen (tuple t) asm "TLEN";
+forall X -> (tuple, X) ~tpop (tuple t) asm "TPOP";
 
 (tuple) reverse_tuple(tuple t1) {
     tuple t2 = empty_tuple();
