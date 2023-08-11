@@ -10,16 +10,6 @@
 -}
 
 (int) tlen (tuple t) asm "TLEN";
-forall X -> (tuple, X) ~tpop (tuple t) asm "TPOP";
-
-(tuple) reverse_tuple(tuple t1) {
-    tuple t2 = empty_tuple();
-    repeat (t1.tlen()) {
-        var value = t1~tpop();
-        t2~tpush(value);
-    }
-    return t2;
-}
 
 () recv_internal() {
 }
@@ -75,7 +65,7 @@ forall X -> (tuple, X) ~tpop (tuple t) asm "TPOP";
             tmp~tpush(sum);
             j += 1;
         }
-        result~tpush(reverse_tuple(tmp));
+        result~tpush(tmp);
         i += 1;
     }
     
