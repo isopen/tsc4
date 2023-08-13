@@ -27,10 +27,10 @@
     elseif (colsA < 4) {
       return empty_tuple();
     }
-    elseif (rowsA > 32) {
+    elseif (rowsA > 30) {
       return empty_tuple();
     }
-    elseif (colsA > 32) {
+    elseif (colsA > 30) {
       return empty_tuple();
     }
     elseif (rowsB < 4) {
@@ -39,10 +39,10 @@
     elseif (colsB < 4) {
       return empty_tuple();
     }
-    elseif (rowsB > 32) {
+    elseif (rowsB > 30) {
       return empty_tuple();
     }
-    elseif (colsB > 32) {
+    elseif (colsB > 30) {
       return empty_tuple();
     }
     elseif (colsA != rowsB) {
