@@ -45,7 +45,7 @@
     elseif (colsB > 32) {
       return empty_tuple();
     }
-    elseif (rowsA != colsA) {
+    elseif (colsA != rowsB) {
       return empty_tuple();
     }
 
