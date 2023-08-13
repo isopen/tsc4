@@ -52,13 +52,13 @@
     tuple result = empty_tuple();
 
     int i = 0;
-    repeat (rowsA) {
+    repeat (rowsA - 1) {
         tuple tmp = empty_tuple();
         int j = 0;
-        repeat (colsB) {
+        repeat (colsB - 1) {
             int sum = 0;
             int k = 0;
-            repeat (rowsB) {
+            repeat (rowsB - 1) {
                 sum += matrixA.at(i).at(k) * matrixB.at(k).at(j);
                 k += 1;
             }
