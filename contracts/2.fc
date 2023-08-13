@@ -62,10 +62,10 @@
                 sum += matrixA.at(i).at(k) * matrixB.at(k).at(j);
                 k += 1;
             }
-            tmp~store_uint(sum, 8);
+            tmp~store_int(sum, 8);
             j += 1;
         }
-        result~tpush(tmp.end_cell().begin_parse());
+        result~tpush(tmp.end_cell());
         i += 1;
     }
     
