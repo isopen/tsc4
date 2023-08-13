@@ -22,15 +22,12 @@ forall X -> (tuple, (X)) pop_back (tuple t) asm "UNCONS";
     cell cs = stack~pop_back();
     slice s = cs.begin_parse();
 
-    repeat (s.slice_refs()) {
-      stack~push_back(s~load_ref());
+    if (hash = cs.cell_hash()) {
+      return cs;
     }
 
-    while (~ s.slice_empty?()) {
-      int x = s~load_uint(257);
-      if (x == hash) {
-        return cs;
-      }
+    repeat (s.slice_refs()) {
+      stack~push_back(s~load_ref());
     }
   }
 
