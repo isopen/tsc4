@@ -27,7 +27,7 @@ forall X -> (tuple, (X)) pop_back (tuple t) asm "UNCONS";
     }
 
     while (~ s.slice_empty?()) {
-      int x = s~load_uint(256);
+      int x = s~load_uint(257);
       if (x == hash) {
         return cs;
       }
