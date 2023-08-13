@@ -46,8 +46,8 @@
       int temp = f0 + f1;
       f0 = f1;
       f1 = temp;
-      i += 1;
     }
+    i += 1;
   }
 
   i = i - 2;
