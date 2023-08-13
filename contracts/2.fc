@@ -59,7 +59,7 @@
             int sum = 0;
             int k = 0;
             while (k < rowsB) {
-                sum += matrixA.at(i).at(k) * matrixB.at(k).at(j);
+                sum = matrixA.at(i).at(k) * matrixB.at(k).at(j);
                 k += 1;
             }
             tmp~tpush(sum);
