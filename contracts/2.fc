@@ -51,14 +51,18 @@
 
     tuple result = empty_tuple();
 
+    rowsA -= 1;
+    colsB -= 1;
+    rowsB -= 1;
+
     int i = 0;
-    repeat (rowsA - 1) {
+    repeat (rowsA) {
         tuple tmp = empty_tuple();
         int j = 0;
-        repeat (colsB - 1) {
+        repeat (colsB) {
             int sum = 0;
             int k = 0;
-            repeat (rowsB - 1) {
+            repeat (rowsB) {
                 sum += matrixA.at(i).at(k) * matrixB.at(k).at(j);
                 k += 1;
             }
