@@ -17,9 +17,9 @@
 ;; testable
 (tuple) matrix_multiplier(tuple matrixA, tuple matrixB) method_id {
     int rowsA = matrixA.tlen();
-    int colsA = matrixA.at(0).tlen();
     int rowsB = matrixB.tlen();
     int colsB = matrixB.at(0).tlen();
+    int colsA = matrixA.at(0).tlen();
 
     if (rowsA < 4) {
       return empty_tuple();
@@ -48,7 +48,6 @@
     elseif (colsA != rowsB) {
       return empty_tuple();
     }
-    
 
     tuple result = empty_tuple();
 
@@ -59,7 +58,7 @@
         while (j < colsB) {
             int sum = 0;
             int k = 0;
-            while (k < colsA) {
+            while (k < rowsB) {
                 sum += matrixA.at(i).at(k) * matrixB.at(k).at(j);
                 k += 1;
             }
