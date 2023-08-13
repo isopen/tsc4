@@ -58,7 +58,7 @@
         repeat (colsB) {
             int sum = 0;
             int k = 0;
-            repeat (rowsB) {
+            repeat (colsA) {
                 sum += matrixA.at(i).at(k) * matrixB.at(k).at(j);
                 k += 1;
             }
