@@ -51,10 +51,9 @@
 
     tuple result = empty_tuple();
 
-    int test = 0;
     int i = 0;
     repeat (rowsA) {
-        builder msg = begin_cell();
+        builder tmp = begin_cell();
         int j = 0;
         repeat (colsB) {
             int sum = 0;
@@ -63,12 +62,10 @@
                 sum += matrixA.at(i).at(k) * matrixB.at(k).at(j);
                 k += 1;
             }
-            test = 1;
-            msg = msg.store_coins(sum);
+            tmp~store_uint(sum, 8);
             j += 1;
         }
-        cell cs = msg.end_cell();
-        result~tpush(cs);
+        result~tpush(tmp.end_cell());
         i += 1;
     }
     
