@@ -52,14 +52,14 @@
     tuple result = empty_tuple();
 
     int i = 0;
-    while (i < rowsA) {
+    repeat (rowsA) {
         tuple tmp = empty_tuple();
         int j = 0;
-        while (j < colsB) {
+        repeat (colsB) {
             int sum = 0;
             int k = 0;
-            while (k < rowsB) {
-                sum = matrixA.at(i).at(k) * matrixB.at(k).at(j);
+            repeat (rowsB) {
+                sum += matrixA.at(i).at(k) * matrixB.at(k).at(j);
                 k += 1;
             }
             tmp~tpush(sum);
