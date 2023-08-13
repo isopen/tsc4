@@ -51,10 +51,10 @@
 
     tuple result = empty_tuple();
 
+    int test = 0;
     int i = 0;
     repeat (rowsA) {
-        ;; tuple tmp = empty_tuple();
-        builder bcs = begin_cell();
+        builder msg = begin_cell();
         int j = 0;
         repeat (colsB) {
             int sum = 0;
@@ -63,11 +63,11 @@
                 sum += matrixA.at(i).at(k) * matrixB.at(k).at(j);
                 k += 1;
             }
-            bcs.store_grams(sum);
-            ;;tmp~tpush(sum);
+            test = 1;
+            msg = msg.store_coins(sum);
             j += 1;
         }
-        cell cs = bcs.end_cell();
+        cell cs = msg.end_cell();
         result~tpush(cs);
         i += 1;
     }
