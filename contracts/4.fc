@@ -17,8 +17,16 @@
   builder result = begin_cell();
   while (~ slice_data_empty?(string)) {
     int ch = string~load_uint(8);
-    int encrypted_ch = (ch + shift) % 256;
-    result.store_uint(encrypted_ch, 8);
+    if (ch >= 65) & (ch <= 90) {
+        int encrypted_ch = ((ch - 65 + shift) % 26) + 65;
+        result.store_uint(encrypted_ch, 8);
+    }
+    elseif (ch >= 97) & (ch <= 122) {
+        int encrypted_ch = ((ch - 97 + shift) % 26) + 97;
+        result.store_uint(encrypted_ch, 8);
+    } else {
+        result.store_uint(ch, 8);
+    }
   }
   return result.end_cell();
 }
@@ -31,9 +39,16 @@
   builder result = begin_cell();
   while (~ slice_data_empty?(string)) {
     int ch = string~load_uint(8);
-    int decrypted_ch = (ch - shift) % 256;
-    result.store_uint(decrypted_ch, 8);
+    if (ch >= 65) & (ch <= 90) {
+        int decrypted_ch = ((ch - 65 - shift + 26) % 26) + 65;
+        result.store_uint(decrypted_ch, 8);
+    }
+    elseif (ch >= 97) & (ch <= 122) {
+        int decrypted_ch = ((ch - 97 - shift + 26) % 26) + 97;
+        result.store_uint(decrypted_ch, 8);
+    } else {
+        result.store_uint(ch, 8);
+    }
   }
   return result.end_cell();
 }
-
