@@ -53,8 +53,7 @@
 
     int i = 0;
     repeat (rowsA) {
-        ;; tuple tmp = empty_tuple();
-        builder bcs = begin_cell();
+        tuple tmp = empty_tuple();
         int j = 0;
         repeat (colsB) {
             int sum = 0;
@@ -63,11 +62,10 @@
                 sum += matrixA.at(i).at(k) * matrixB.at(k).at(j);
                 k += 1;
             }
-            bcs~store_uint(sum, 16);
-            ;;tmp~tpush(sum);
+            tmp~tpush(sum);
             j += 1;
         }
-        result~tpush(bcs.end_cell());
+        result~tpush(tmp);
         i += 1;
     }
     
