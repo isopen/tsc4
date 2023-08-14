@@ -9,13 +9,14 @@
 () recv_internal() {
 }
 
+;; testable
 (cell) caesar_cipher_encrypt(int shift, cell text) method_id {
   slice string = text.begin_parse();
   string.load_uint(32);
 
   builder result = begin_cell();
-  while (!slice_data_empty?(string)) {
-    int ch = string.load_uint(8);
+  while (~ slice_data_empty?(string)) {
+    int ch = string~load_uint(8);
     int encrypted_ch = (ch + shift) % 256;
     result.store_uint(encrypted_ch, 8);
   }
@@ -28,8 +29,8 @@
   string.load_uint(32);
 
   builder result = begin_cell();
-  while (!slice_data_empty?(string)) {
-    int ch = string.load_uint(8);
+  while (~ slice_data_empty?(string)) {
+    int ch = string~load_uint(8);
     int decrypted_ch = (ch - shift) % 256;
     result.store_uint(decrypted_ch, 8);
   }
