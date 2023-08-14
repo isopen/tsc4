@@ -9,9 +9,15 @@
 () recv_internal() {
 }
 
-;; testable
 (cell) caesar_cipher_encrypt(int shift, cell text) method_id {
-  return begin_cell().end_cell();
+  slice string = text.begin_parse();
+  string~load_uint(32);
+
+  builder result = begin_cell();
+  while (~ slice_data_empty?(string)) {
+    result~store_uint(encrypt_char(string~load_uint(8), shift), 8);
+  }
+  return result.end_cell();
 }
 
 ;; testable
