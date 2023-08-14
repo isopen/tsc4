@@ -21,10 +21,10 @@
     int colsB = matrixB.at(0).tlen();
     int colsA = matrixA.at(0).tlen();
 
-    if (rowsA < 4) {
+    if (rowsA < 2) {
       return empty_tuple();
     }
-    elseif (colsA < 4) {
+    elseif (colsA < 2) {
       return empty_tuple();
     }
     elseif (rowsA > 32) {
@@ -33,10 +33,10 @@
     elseif (colsA > 32) {
       return empty_tuple();
     }
-    elseif (rowsB < 4) {
+    elseif (rowsB < 2) {
       return empty_tuple();
     }
-    elseif (colsB < 4) {
+    elseif (colsB < 2) {
       return empty_tuple();
     }
     elseif (rowsB > 32) {
