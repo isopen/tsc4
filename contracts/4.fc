@@ -29,8 +29,8 @@
 
   builder result = begin_cell();
   while (!slice_data_empty?(string)) {
-    uchar ch = string.load_uint(8);
-    uchar decrypted_ch = (ch - shift) % 256;
+    int ch = string.load_uint(8);
+    int decrypted_ch = (ch - shift) % 256;
     result.store_uint(decrypted_ch, 8);
   }
   return result.end_cell();
