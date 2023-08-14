@@ -28,6 +28,9 @@
         result = result.store_uint(ch, 8);
     }
   }
+  if (string.slice_refs()) {
+    return result.store_ref(caesar_cipher_encrypt(string~load_ref().begin_parse(), shift)).end_cell();
+  }
   return result.end_cell();
 }
 
