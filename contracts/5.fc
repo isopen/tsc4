@@ -26,7 +26,8 @@
   int f0 = 0;
   int f1 = 1;
   int i = 0;
-  int c = c > 368 ? 369 : n + k;
+  int c = 0;
+  c > 368 ? c = 369 : c = n + k;
   repeat (c) {
     if (i >= n) { fib~tpush(f0); }
     int temp = f0 + f1;
