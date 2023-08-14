@@ -19,7 +19,7 @@
     int ch = string~load_uint(8);
     if (ch >= 65) & (ch <= 90) {
         int ech = ((ch - 65 + shift) % 26) + 65;
-        result = result.store_uint(encrypted_ch, 8);
+        result = result.store_uint(ech, 8);
     }
     elseif (ch >= 97) & (ch <= 122) {
         int ech = ((ch - 97 + shift) % 26) + 97;
