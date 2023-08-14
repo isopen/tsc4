@@ -27,19 +27,19 @@
   int f1 = 1;
   int i = 0;
   int c = n + k;
+  if (c > 368) {
+    c = 369;
+  }
   repeat (c) {
-    if (i < 369) {
-      if (i >= n) {
-        fib~tpush(f0);
-      }
-      int temp = f0 + f1;
-      f0 = f1;
-      f1 = temp;
+    if (i >= n) {
+      fib~tpush(f0);
     }
+    int temp = f0 + f1;
+    f0 = f1;
+    f1 = temp;
     i += 1;
   }
 
-  i -= 2;
   if (i >= n) {
     if (i == 369) { fib~tpush(58472848379039952684853851736901133239741266891456844557261755914039063645794); }
     i += 1;
