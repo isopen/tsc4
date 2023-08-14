@@ -19,38 +19,35 @@
 () recv_internal() {
 }
 
-(tuple) fibonacci_sequence (int n, int k) method_id {
-  if (n < 0) {
-    return empty_tuple();
-  }
-  elseif (k < 0) {
-    return empty_tuple();
-  }
-  elseif (n > 370) {
-    return empty_tuple();
-  }
-  elseif (k > 255) {
-    return empty_tuple();
-  }
-  elseif (n + k > 371) {
-    return empty_tuple();
-  }
+(cell) find_and_replace(int flag, int value, cell linked_list) method_id {
+  cell current_cell = linked_list;
+  cell prev_cell = begin_cell().end_cell();
+  tuple stack = null();
+  stack~push_back(linked_list);
+  while (~ stack.is_null()) {
+    cell cs = stack~pop_back();
+    slice s = cs.begin_parse();
 
-  tuple fib = empty_tuple();
-  int f0 = 0;
-  int f1 = 1;
-  int temp = 0;
-  int i = 0;
-  while (i < n + k) {
-    if (i >= n) {
-      fib~tpush(f0);
+    repeat (s.slice_refs()) {
+      stack~push_back(s~load_ref());
     }
-    temp = f0 + f1;
-    f0 = f1;
-    f1 = temp;
-    i += 1;
+
+    int lock = 1;
+    int found = 0;
+    while (lock) {
+      int x = s~load_uint(128);
+      if (s.slice_empty?()) {
+        lock = 0;
+      }
+      else {
+        if (x == flag) {
+          s~store_uint(128, value);
+          found = 1;
+        }
+      }
+    }
   }
 
-  return fib;
+  return current_cell;
 }
 
