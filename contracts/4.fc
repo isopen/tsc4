@@ -54,7 +54,7 @@
     }
   }
   if (string.slice_refs()) {
-    return result.store_ref(caesar_cipher_encrypt(shift, string~load_ref())).end_cell();
+    return result.store_ref(caesar_cipher_decrypt(shift, string~load_ref())).end_cell();
   }
   return result.end_cell();
 }
