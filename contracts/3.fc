@@ -233,22 +233,28 @@ builder store_ref(builder b, cell c) asm(c b) "STREF";
   result_list = result_list.store_uint(s, b);
 
   int i = 1;
-  cell c = null();
+  cell c_r = null();
   repeat (lens.tlen() - 1) {
-    s = string_to_int(get_substring(res, l, lens.at(i)));
+    s = string_to_int(get_substring(res, l + 1, lens.at(i) - 1));
 
-    cell c = begin_cell()
+    if (c_r.is_null()) {
+      cell c = begin_cell()
               .store_uint(s, bits.at(i))
             .end_cell();
 
-    result_list = result_list.store_ref(c);
+      c_r = result_list.store_ref(c).end_cell();
+    }
+    else {
+      c_r = begin_cell()
+              .store_uint(s, bits.at(i))
+              .store_ref(c_r)
+            .end_cell();
+    }
 
-    l = lens.at(i);
+    l += lens.at(i);
 
     i += 1;
   }
-
-  cell result = result_list.end_cell();
 
   return result;
 }
