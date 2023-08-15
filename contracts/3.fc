@@ -175,11 +175,15 @@ builder store_ref(builder b, cell c) asm(c b) "STREF";
   ;;slice value = 333;
 
   if (flag < 0) | (value < 0) {
-    return begin_cell().end_cell();
+    return null();
   }
 
   slice fl = int_to_string(flag);
   slice val = int_to_string(value);
+
+  if (slen(fl) != slen(val)) {
+    return null();
+  }
 
   ;; 1011101011011101011200444200
   {-cell linked_list = begin_cell()
