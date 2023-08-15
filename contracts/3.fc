@@ -174,8 +174,8 @@ builder store_ref(builder b, cell c) asm(c b) "STREF";
   ;;slice flag = 0;
   ;;slice value = 333;
 
-  if (flag < 0) | (value < 0) {
-    return begin_cell().end_cell();
+  if (flag <= 0) | (value <= 0) {
+    return null();
   }
 
   slice fl = int_to_string(flag);
