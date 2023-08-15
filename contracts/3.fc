@@ -156,8 +156,8 @@
     return begin_cell().end_cell();
   }
 
-  flag = int_to_string(flag);
-  value = int_to_string(value);
+  slice fl = int_to_string(flag);
+  slice val = int_to_string(value);
 
   ;; 1011101011011101011200444200
   {-cell linked_list = begin_cell()
@@ -200,7 +200,7 @@
     }
   }
 
-  res = replace_all(res, flag, value);
+  res = replace_all(res, fl, val);
 
   builder result_list = begin_cell();
   {-result_list = result_list.store_uint(1, 32);
