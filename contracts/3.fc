@@ -256,6 +256,6 @@ builder store_ref(builder b, cell c) asm(c b) "STREF";
     i += 1;
   }
 
-  return result;
+  return c_r;
 }
 
