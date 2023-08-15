@@ -255,11 +255,12 @@ builder store_ref(builder b, cell c) asm(c b) "STREF";
     s = string_to_int(get_substring(res, (lll - l) + 1, lens.at(i) - 1));
 
     if (c_r.is_null()) {
-      cell c = begin_cell()
-                .store_uint(s, bits.at(i))
-              .end_cell();
+      c_r = result_list.end_cell();
 
-      c_r = result_list.store_ref(c).end_cell();
+      c_r = begin_cell()
+                .store_uint(s, bits.at(i))
+                .store_ref(c_r)
+              .end_cell();
     }
     else {
       c_r = begin_cell()
