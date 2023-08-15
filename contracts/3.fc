@@ -73,6 +73,15 @@ builder store_ref(builder b, cell c) asm(c b) "STREF";
 	return cs.begin_parse();
 }
 
+(tuple) reverse_tuple(tuple t1) {
+    tuple t2 = empty_tuple();
+    repeat (t1.tlen()) {
+        var value = t1~tpop();
+        t2~tpush(value);
+    }
+    return t2;
+}
+
 (slice) get_substring(slice string_number, int i, int k) {
   int len = slen(string_number);
   int j = len - k;
@@ -226,21 +235,29 @@ builder store_ref(builder b, cell c) asm(c b) "STREF";
   result = result.store_ref(c1);
   cell c2 = result.end_cell();-}
 
+  lens = reverse_tuple(lens);
+  bits = reverse_tuple(bits);
+
   int l = lens.at(0);
   int b = bits.at(0);
 
-  int s = string_to_int(get_substring(res, 0, l));
+  int lll = slen(res);
+
+  ;;int s = string_to_int(get_substring(res, 0, l));
+  int s = string_to_int(get_substring(res, lll - l, l));
   result_list = result_list.store_uint(s, b);
 
   int i = 1;
   cell c_r = null();
   repeat (lens.tlen() - 1) {
-    s = string_to_int(get_substring(res, l + 1, lens.at(i) - 1));
+    l += lens.at(i);
+    ;;s = string_to_int(get_substring(res, l + 1, lens.at(i) - 1));
+    s = string_to_int(get_substring(res, (lll - l) + 1, lens.at(i) - 1));
 
     if (c_r.is_null()) {
       cell c = begin_cell()
-              .store_uint(s, bits.at(i))
-            .end_cell();
+                .store_uint(s, bits.at(i))
+              .end_cell();
 
       c_r = result_list.store_ref(c).end_cell();
     }
@@ -251,10 +268,29 @@ builder store_ref(builder b, cell c) asm(c b) "STREF";
             .end_cell();
     }
 
-    l += lens.at(i);
+    ;; l += lens.at(i);
 
     i += 1;
   }
+
+  ;;slice kk = c_r.begin_parse();
+
+  {-
+  lens
+  items: [
+        { type: 'int', value: 6n },
+        { type: 'int', value: 15n },
+        { type: 'int', value: 4n },
+        { type: 'int', value: 9n }
+      ]
+  bits
+  items: [
+        { type: 'int', value: 83n },
+        { type: 'int', value: 82n },
+        { type: 'int', value: 80n },
+        { type: 'int', value: 81n }
+      ]
+  -}
 
   return c_r;
 }
