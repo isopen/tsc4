@@ -19,11 +19,164 @@
 () recv_internal() {
 }
 
+(int) string_to_int(slice string_number) {
+    int number = 0;
+
+    while (~ string_number.slice_empty?()) {
+        int char = string_number~load_uint(8);
+        number = (number * 10) + (char - 48);
+    }
+
+    return number;
+}
+
+(slice) int_to_string(int n) {
+    builder string = begin_cell();
+    tuple chars = null();
+    do {
+        int r = n~divmod(10);
+        chars = cons(r + 48, chars);
+    } until (n == 0);
+    do {
+        int char = chars~list_next();
+        string~store_uint(char, 8);
+    } until (null?(chars));
+
+    slice result = string.end_cell().begin_parse();
+
+    return result;
+}
+
+(int) slen(slice s) {
+    return slice_bits(s) / 8;
+}
+
+(slice) add_slice(slice s, slice s1) {
+  cell cs = begin_cell()
+              .store_slice(s)
+			        .store_slice(s1)
+		        .end_cell();
+
+	return cs.begin_parse();
+}
+
+(slice) get_substring(slice string_number, int i, int k) {
+  int len = slen(string_number);
+  int j = len - k;
+
+  if (j >= i) & (i <= len) {
+    builder string = begin_cell();
+
+    int t = 1;
+    while (~ string_number.slice_empty?()) {
+      int char = string_number~load_uint(8);
+      if (t >= i) & (t <= i + k) {
+        string~store_uint(char, 8);
+      }
+      t += 1;
+    }
+
+    slice result = string.end_cell().begin_parse();
+
+    return result;
+  }
+  else {
+    return null();
+  }
+}
+
+(slice) get_endstring(slice string_number, int i) {
+  builder string = begin_cell();
+
+  int t = 1;
+  while (~ string_number.slice_empty?()) {
+    int char = string_number~load_uint(8);
+    if (t >= i) {
+      string~store_uint(char, 8);
+    }
+    t += 1;
+  }
+
+  slice result = string.end_cell().begin_parse();
+
+  return result;
+}
+
+(int) is_equalstring(slice s, slice s1) {
+  while (~ s.slice_empty?()) {
+    int char = s~load_uint(8);
+    int char1 = s1~load_uint(8);
+    if (char != char1) {
+      return 0;
+    }
+  }
+
+  return 1;
+}
+
+(slice) replace_all(slice s, slice f, slice v) {
+  int lf = slen(f);
+  int ls = slen(s);
+  slice r = get_substring(s, 0, lf);
+  int i = lf + 1;
+  if (is_equalstring(s, f)) {
+    r = v;
+  }
+  else {
+    r = get_substring(s, 1, 0);
+    i = 2;
+  }
+
+  int lock = 1;
+  while (lock) {
+    slice tmp = get_substring(s, i, lf - 1);
+    if (tmp.is_null()) {
+      r = add_slice(r, get_endstring(s, i));
+      lock = 0;
+    } else {
+      if (is_equalstring(tmp, f)) {
+        r = add_slice(r, v);
+        i += lf;
+      }
+      else {
+        r = add_slice(r, get_substring(s, i, 0));
+        i += 1;
+      }
+    }
+  }
+
+  return r;
+}
+
 (cell) find_and_replace(int flag, int value, cell linked_list) method_id {
-  cell current_cell = linked_list;
-  cell prev_cell = begin_cell().end_cell();
+  ;;slice flag = 0;
+  ;;slice value = 333;
+
+  if (flag < 0) | (value < 0) {
+    return begin_cell().end_cell();
+  }
+
+  flag = int_to_string(flag);
+  value = int_to_string(value);
+
+  ;; 1011101011011101011200444200
+  {-cell linked_list = begin_cell()
+        .store_uint(101110101, 81)
+        .store_ref(begin_cell()
+            .store_uint(1011, 80)
+            .store_ref(begin_cell()
+              .store_uint(101011200444200, 80)
+            .end_cell())
+        .end_cell())
+    .end_cell();-}
+        
   tuple stack = null();
   stack~push_back(linked_list);
+
+  tuple lens = empty_tuple();
+  tuple bits = empty_tuple();
+  slice res = "";
+
   while (~ stack.is_null()) {
     cell cs = stack~pop_back();
     slice s = cs.begin_parse();
@@ -32,22 +185,58 @@
       stack~push_back(s~load_ref());
     }
 
+    int c_l = 0;
     int lock = 1;
-    int found = 0;
     while (lock) {
-      int x = s~load_uint(128);
       if (s.slice_empty?()) {
         lock = 0;
-      }
-      else {
-        if (x == flag) {
-          s~store_uint(128, value);
-          found = 1;
-        }
+      } else {
+        int b = slice_bits(s);
+        slice cell_value = int_to_string(s~load_uint(b));
+        lens~tpush(slen(cell_value));
+        bits~tpush(b);
+        res = add_slice(res, cell_value);
       }
     }
   }
 
-  return current_cell;
+  res = replace_all(res, flag, value);
+
+  builder result_list = begin_cell();
+  {-result_list = result_list.store_uint(1, 32);
+  cell c = begin_cell().store_uint(2, 32).end_cell();
+  result_list = result_list.store_ref(c);
+
+  cell c1 = result_list.end_cell();
+
+  builder result = begin_cell().store_uint(3, 32);
+  result = result.store_ref(c1);
+  cell c2 = result.end_cell();-}
+
+  int l = lens.at(0);
+  int b = bits.at(0);
+
+  int s = string_to_int(get_substring(res, 0, l));
+  result_list = result_list.store_uint(s, b);
+
+  int i = 1;
+  cell c = null();
+  repeat (lens.tlen() - 1) {
+    s = string_to_int(get_substring(res, l, lens.at(i)));
+
+    cell c = begin_cell()
+              .store_uint(s, bits.at(i))
+            .end_cell();
+
+    result_list = result_list.store_ref(c);
+
+    l = lens.at(i);
+
+    i += 1;
+  }
+
+  cell result = result_list.end_cell();
+
+  return result;
 }
 
