@@ -217,11 +217,11 @@ builder store_ref(builder b, cell c) asm(c b) "STREF";
 }
 
 (cell) find_and_replace({-int flag, int value, cell linked_list-}) method_id {
-  int flag = 373;
-  int value = 511;
+  ;; int flag = 373;
+  ;; int value = 511;
 
   if (flag < 0) | (value < 0) {
-    ;;return begin_cell().end_cell();
+    return begin_cell().end_cell();
   }
 
   slice fl = dec2bin(flag);
@@ -249,12 +249,12 @@ builder store_ref(builder b, cell c) asm(c b) "STREF";
             .end_cell())
         .end_cell())
     .end_cell();-}
-  cell linked_list = begin_cell()
+  {-cell linked_list = begin_cell()
         .store_uint(1291, 11)
         .store_ref(begin_cell()
             .store_uint(10815, 14)
             .end_cell())
-        .end_cell();
+        .end_cell();-}
         
   tuple stack = null();
   stack~push_back(linked_list);
