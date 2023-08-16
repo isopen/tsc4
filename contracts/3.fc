@@ -221,7 +221,7 @@ builder store_ref(builder b, cell c) asm(c b) "STREF";
   ;; int value = 511;
 
   if (flag <= 0) | (value <= 0) {
-    return null();
+    return begin_cell().end_cell();
   }
 
   slice fl = dec2bin(flag);
