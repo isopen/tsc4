@@ -231,14 +231,14 @@ builder store_ref(builder b, cell c) asm(c b) "STREF";
 
 (cell) find_and_replace(int flag, int value, cell linked_list) method_id {
   if (flag <= 0) | (value <= 0) {
-    return null();
+    return begin_cell().end_cell();
   }
 
   slice fl = dec2bin(flag);
   slice val = dec2bin(value);
 
   if (slen(fl) >= 128) | (slen(val) >= 128) | (slen(fl) != slen(val)) {
-    return null();
+    return begin_cell().end_cell();
   }
 
   {-
@@ -323,7 +323,7 @@ builder store_ref(builder b, cell c) asm(c b) "STREF";
   }
 
   if (is_binary_string(res)) {
-    return null();
+    return begin_cell().end_cell();
   }
 
   res = replace_all(res, fl, val);
