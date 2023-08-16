@@ -220,7 +220,7 @@ builder store_ref(builder b, cell c) asm(c b) "STREF";
   ;; int flag = 373;
   ;; int value = 511;
 
-  if (flag <= 0) | (value <= 0) {
+  if (flag < 0) | (value < 0) {
     return begin_cell().end_cell();
   }
 
