@@ -215,6 +215,17 @@ builder store_ref(builder b, cell c) asm(c b) "STREF";
   return dn;
 }
 
+(int) is_binary_string(slice s) {
+  while (~ s.slice_empty?()) {
+    int c = s~load_uint(8);
+    if (c != 49) & (c != 48) {
+      return 1;
+    }
+  }
+  
+  return 0;
+}
+
 () recv_internal() {
 }
 
@@ -309,6 +320,10 @@ builder store_ref(builder b, cell c) asm(c b) "STREF";
         res = add_slice(res, cell_value); ;; 1023 bit !!!
       }
     }
+  }
+
+  if (is_binary_string(res)) {
+    return begin_cell().end_cell();
   }
 
   res = replace_all(res, fl, val);
