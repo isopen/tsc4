@@ -306,7 +306,7 @@ builder store_ref(builder b, cell c) asm(c b) "STREF";
   cell c_r = null();
   repeat (lens.tlen() - 1) {
     l += lens.at(i);
-    s = get_substring(res, (lll - l) + 1, lens.at(i) - 1);
+    s = get_substring(res, (lll - slen(s)) + 1, slen(s) - 1);
 
     if (c_r.is_null()) {
       c_r = result_list.end_cell();
