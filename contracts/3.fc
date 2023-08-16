@@ -1,20 +1,4 @@
-{- 
-  TASK 3 - Find and replace binary substring
-  Binary string is represented as a cell linked list: string splitted to chunks,
-  first chunk stored to the root cell, next one to the cell in ref and so on;
-  each cell can have only one ref. 
-  Write the method that find and replaces one flags in the binary string
-  with another value. Flags and values can be can be of any length, but
-  strictly up to 128 bits. The method must replace every flag it finds.
-  Flag and the value to be replaced is guaranteed to be greater than 0.
-  Lets give a simple example. We have the target flag 101110101 and the value
-  to be written 111111111 as inputs, and a linked list of cells, in which the bit
-  value of the first cell ends with ...10100001011, and in the ref we have cell that
-  starts with 10101000111111...
-  The output should be a linked list where the first
-  cell ends with ...10100001111, and the second cell starts with 11111000111111...
-
--}
+#include "imports/stdlib.fc";
 
 (int) tlen (tuple t) asm "TLEN";
 forall X -> (tuple, X) ~tpop (tuple t) asm "TPOP";
@@ -29,39 +13,85 @@ forall X -> (tuple, (X)) pop_back (tuple t) asm "UNCONS";
 forall X -> int is_tuple (X x) asm "ISTUPLE";
 builder store_ref(builder b, cell c) asm(c b) "STREF";
 
-() recv_internal() {
-}
+{-
+  TASK 3 - Find and replace binary substring
+  Binary string is represented as a cell linked list: string splitted to chunks,
+  first chunk stored to the root cell, next one to the cell in ref and so on;
+  each cell can have only one ref. 
+  Write the method that find and replaces one flags in the binary string
+  with another value. Flags and values can be can be of any length, but
+  strictly up to 128 bits. The method must replace every flag it finds.
+  Flag and the value to be replaced is guaranteed to be greater than 0.
+  Lets give a simple example. We have the target flag 101110101 and the value
+  to be written 111111111 as inputs, and a linked list of cells, in which the bit
+  value of the first cell ends with ...10100001011, and in the ref we have cell that
+  starts with 10101000111111...
+  The output should be a linked list where the first
+  cell ends with ...10100001111, and the second cell starts with 11111000111111...
+-}
 
+;; https://docs.ton.org/develop/func/cookbook#how-to-convert-int-to-string
 (int) string_to_int(slice string_number) {
-    int number = 0;
+  int number = 0;
 
-    while (~ string_number.slice_empty?()) {
-        int char = string_number~load_uint(8);
-        number = (number * 10) + (char - 48);
-    }
+  while (~ string_number.slice_empty?()) {
+    int char = string_number~load_uint(8);
+    number = (number * 10) + (char - 48);
+  }
 
-    return number;
+  return number;
 }
 
+;; https://docs.ton.org/develop/func/cookbook#how-to-convert-int-to-string
 (slice) int_to_string(int n) {
-    builder string = begin_cell();
-    tuple chars = null();
-    do {
-        int r = n~divmod(10);
-        chars = cons(r + 48, chars);
-    } until (n == 0);
-    do {
-        int char = chars~list_next();
-        string~store_uint(char, 8);
-    } until (null?(chars));
+  builder string = begin_cell();
+  tuple chars = null();
+  do {
+    int r = n~divmod(10);
+    chars = cons(r + 48, chars);
+  } until (n == 0);
+  do {
+    int char = chars~list_next();
+    string~store_uint(char, 8);
+  } until (null?(chars));
 
-    slice result = string.end_cell().begin_parse();
+  slice result = string.end_cell().begin_parse();
 
-    return result;
+  return result;
+}
+
+;; https://github.com/TonoxDeFi/open-contracts/blob/main/contracts/math/math.func
+(int) math::pow(int n, int e) {
+  if (e == 0) {
+    return 1;
+  }
+
+  if (e == 1) {
+    return n;
+  }
+
+  int p = math::pow(n, (e / 2));
+  p = p * p;
+    
+  if ((e % 2) == 1) {
+    p = p * n;
+  }
+    
+  return p;
+}
+
+;; https://docs.ton.org/develop/func/cookbook#reversing-tuples
+(tuple) reverse_tuple(tuple t1) {
+  tuple t2 = empty_tuple();
+  repeat (t1.tlen()) {
+    var value = t1~tpop();
+    t2~tpush(value);
+  }
+  return t2;
 }
 
 (int) slen(slice s) {
-    return slice_bits(s) / 8;
+  return slice_bits(s) / 8;
 }
 
 (slice) add_slice(slice s, slice s1) {
@@ -73,53 +103,49 @@ builder store_ref(builder b, cell c) asm(c b) "STREF";
 	return cs.begin_parse();
 }
 
-(slice) get_substring(slice string_number, int i, int k) {
-  int len = slen(string_number);
+(slice) get_substring(slice sn, int i, int k) {
+  int len = slen(sn);
   int j = len - k;
 
   if (j >= i) & (i <= len) {
-    builder string = begin_cell();
+    builder b = begin_cell();
 
     int t = 1;
-    while (~ string_number.slice_empty?()) {
-      int char = string_number~load_uint(8);
+    while (~ sn.slice_empty?()) {
+      int c = sn~load_uint(8);
       if (t >= i) & (t <= i + k) {
-        string~store_uint(char, 8);
+        b~store_uint(c, 8);
       }
       t += 1;
     }
 
-    slice result = string.end_cell().begin_parse();
-
-    return result;
+    return b.end_cell().begin_parse();
   }
   else {
     return null();
   }
 }
 
-(slice) get_endstring(slice string_number, int i) {
-  builder string = begin_cell();
+(slice) get_endstring(slice sn, int i) {
+  builder b = begin_cell();
 
   int t = 1;
-  while (~ string_number.slice_empty?()) {
-    int char = string_number~load_uint(8);
+  while (~ sn.slice_empty?()) {
+    int c = sn~load_uint(8);
     if (t >= i) {
-      string~store_uint(char, 8);
+      b~store_uint(c, 8);
     }
     t += 1;
   }
 
-  slice result = string.end_cell().begin_parse();
-
-  return result;
+  return b.end_cell().begin_parse();
 }
 
 (int) is_equalstring(slice s, slice s1) {
   while (~ s.slice_empty?()) {
-    int char = s~load_uint(8);
-    int char1 = s1~load_uint(8);
-    if (char != char1) {
+    int c = s~load_uint(8);
+    int c1 = s1~load_uint(8);
+    if (c != c1) {
       return 0;
     }
   }
@@ -146,38 +172,17 @@ builder store_ref(builder b, cell c) asm(c b) "STREF";
     if (tmp.is_null()) {
       r = add_slice(r, get_endstring(s, i));
       lock = 0;
-    } else {
-      if (is_equalstring(tmp, f)) {
-        r = add_slice(r, v);
-        i += lf;
-      }
-      else {
-        r = add_slice(r, get_substring(s, i, 0));
-        i += 1;
-      }
+    } elseif (is_equalstring(tmp, f)) {
+      r = add_slice(r, v);
+      i += lf;
+    }
+    else {
+      r = add_slice(r, get_substring(s, i, 0));
+      i += 1;
     }
   }
 
   return r;
-}
-
-(int) math::pow(int n, int e) {
-  if (e == 0) {
-    return 1;
-  }
-
-  if (e == 1) {
-    return n;
-  }
-
-  int p = math::pow(n, (e / 2));
-  p = p * p;
-    
-  if ((e % 2) == 1) {
-    p = p * n;
-  }
-    
-  return p;
 }
 
 (slice) dec2bin(int dn) {
@@ -197,32 +202,26 @@ builder store_ref(builder b, cell c) asm(c b) "STREF";
 }
 
 (int) bin2dec(slice bs) {
-    int dn = 0;
-    int power = 0;
+  int dn = 0;
+  int power = 0;
 
-    int i = slen(bs);
-    while (i >= 1) {
-      if (is_equalstring(get_substring(bs, i, 0), "1")) {
-         dn += math::pow(2, power);
-      }
-      power += 1;
-      i -= 1;
+  int i = slen(bs);
+  while (i >= 1) {
+    if (is_equalstring(get_substring(bs, i, 0), "1")) {
+      dn += math::pow(2, power);
     }
+    power += 1;
+    i -= 1;
+  }
 
-    return dn;
+  return dn;
 }
 
-(tuple) reverse_tuple(tuple t1) {
-    tuple t2 = empty_tuple();
-    repeat (t1.tlen()) {
-        var value = t1~tpop();
-        t2~tpush(value);
-    }
-    return t2;
+() recv_internal() {
 }
 
-(cell) find_and_replace(int flag, int value, cell linked_list) method_id {
-  if (flag < 0) | (value < 0) {
+(slice) find_and_replace(int flag, int value, cell linked_list) method_id {
+  if (flag <= 0) | (value <= 0) {
     return begin_cell().end_cell();
   }
 
@@ -232,6 +231,51 @@ builder store_ref(builder b, cell c) asm(c b) "STREF";
   if (slen(fl) >= 128) | (slen(val) >= 128) | (slen(fl) != slen(val)) {
     return begin_cell().end_cell();
   }
+  {-int flag = 373;
+  int value = 511;
+
+  if (flag <= 0) | (value <= 0) {
+    ;;return begin_cell().end_cell();
+  }
+
+  slice fl = dec2bin(flag);
+  slice val = dec2bin(value);
+
+  if (slen(fl) > 128) | (slen(val) > 128) | (slen(fl) != slen(val)) {
+    ;;return begin_cell().end_cell();
+  }
+
+  ;; 1011101011011101011200444200555300
+  cell linked_list = begin_cell()
+        .store_uint(10111010110111010, 128)
+        .store_ref(begin_cell()
+            .store_uint(1011, 80)
+            .store_ref(begin_cell()
+              .store_uint(101011200444200, 128)
+              .store_ref(begin_cell()
+                .store_uint(555300, 128)
+                  .store_ref(begin_cell()
+                    .store_uint(555300, 128)
+                    .store_ref(begin_cell()
+                      .store_uint(555300, 128)
+                      .store_ref(begin_cell()
+                        .store_uint(101110101101110101, 128)
+                      .end_cell())
+                    .end_cell())
+                  .end_cell())
+              .end_cell())
+            .end_cell())
+        .end_cell())
+    .end_cell();
+  cell linked_list = begin_cell()
+        .store_uint(1291, 11)
+        .store_ref(begin_cell()
+            .store_uint(10815, 14)
+              .store_ref(begin_cell()
+                .store_uint(0, 3)
+              .end_cell())
+            .end_cell())
+        .end_cell();-}
         
   tuple stack = null();
   stack~push_back(linked_list);
@@ -254,11 +298,11 @@ builder store_ref(builder b, cell c) asm(c b) "STREF";
       if (s.slice_empty?()) {
         lock = 0;
       } else {
-        ;;int b = slice_bits(s);
-        slice cell_value = dec2bin(s~load_uint(slice_bits(s)));
+        int b = slice_bits(s);
+        slice cell_value = dec2bin(s~load_uint(b));
         lens~tpush(slen(cell_value));
-        ;;bits~tpush(b);
-        res = add_slice(res, cell_value);
+        bits~tpush(b);
+        res = add_slice(res, cell_value); ;; 1023 bit !!!
       }
     }
   }
@@ -271,21 +315,26 @@ builder store_ref(builder b, cell c) asm(c b) "STREF";
   lens = reverse_tuple(lens);
   ;;bits = reverse_tuple(bits);
 
-  int l = lens.at(0);
+  int l = lens.at(0); ;; 14
+  ;;return l;
+  int b = bits.at(0);
+
   int lll = slen(res);
 
   slice s = get_substring(res, (lll - l) + 1, l - 1);
   result_list = result_list.store_uint(bin2dec(s), slen(s));
+  ;;return lll;
+  ;;return bits.at(2);
 
   int i = 1;
   cell c_r = null();
-  int tmp = 0;
   repeat (lens.tlen() - 1) {
-    tmp = l;
     l += lens.at(i);
     s = get_substring(res, (lll - l) + 1, lens.at(i) - 1);
+    ;;return bin2dec(s);
 
     if (c_r.is_null()) {
+      ;;return bin2dec(s);
       c_r = result_list.end_cell();
 
       c_r = begin_cell()
@@ -294,6 +343,7 @@ builder store_ref(builder b, cell c) asm(c b) "STREF";
               .end_cell();
     }
     else {
+      ;;return bin2dec(s);
       c_r = begin_cell()
               .store_uint(bin2dec(s), slen(s))
               .store_ref(c_r)
@@ -303,6 +353,15 @@ builder store_ref(builder b, cell c) asm(c b) "STREF";
     i += 1;
   }
 
+  {-slice kk = c_r.begin_parse();
+
+  cell t = kk~load_ref();
+
+  slice kk1 = t.begin_parse();
+
+  cell t1 = kk1~load_ref();
+
+  slice kk2 = t.begin_parse();-}
+
   return c_r;
 }
-
