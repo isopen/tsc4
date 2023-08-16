@@ -73,15 +73,6 @@ builder store_ref(builder b, cell c) asm(c b) "STREF";
 	return cs.begin_parse();
 }
 
-(tuple) reverse_tuple(tuple t1) {
-    tuple t2 = empty_tuple();
-    repeat (t1.tlen()) {
-        var value = t1~tpop();
-        t2~tpush(value);
-    }
-    return t2;
-}
-
 (slice) get_substring(slice string_number, int i, int k) {
   int len = slen(string_number);
   int j = len - k;
@@ -170,31 +161,91 @@ builder store_ref(builder b, cell c) asm(c b) "STREF";
   return r;
 }
 
-(cell) find_and_replace(int flag, int value, cell linked_list) method_id {
-  ;;slice flag = 0;
-  ;;slice value = 333;
-
-  if (flag <= 0) | (value <= 0) {
-    return null();
+(int) math::pow(int n, int e) {
+  if (e == 0) {
+    return 1;
   }
 
-  slice fl = int_to_string(flag);
-  slice val = int_to_string(value);
+  if (e == 1) {
+    return n;
+  }
 
-  {-if (slen(fl) != slen(val)) {
-    return null();
-  }-}
+  int p = math::pow(n, (e / 2));
+  p = p * p;
+    
+  if ((e % 2) == 1) {
+    p = p * n;
+  }
+    
+  return p;
+}
 
-  ;; 1011101011011101011200444200
+(slice) dec2bin(int dn) {
+  slice bn = "";
+  while (dn > 0) {
+    int r = dn % 2;
+    bn = add_slice(int_to_string(r), bn);
+    dn /= 2;
+  }
+
+  return bn;
+}
+
+(int) bin2dec(slice bs) {
+    int dn = 0;
+    int power = 0;
+
+    int i = slen(bs);
+    while (i >= 1) {
+      if (is_equalstring(get_substring(bs, i, 0), "1")) {
+         dn += math::pow(2, power);
+      }
+      power += 1;
+      i -= 1;
+    }
+
+    return dn;
+}
+
+(cell) find_and_replace({-int flag, int value, cell linked_list-}) method_id {
+  int flag = 373;
+  int value = 511;
+
+  if (flag < 0) | (value < 0) {
+    ;;return begin_cell().end_cell();
+  }
+
+  slice fl = dec2bin(flag);
+  slice val = dec2bin(value);
+
+  ;; 1011101011011101011200444200555300
   {-cell linked_list = begin_cell()
-        .store_uint(101110101, 81)
+        .store_uint(101110101101110101101110101101110101, 81)
         .store_ref(begin_cell()
             .store_uint(1011, 80)
             .store_ref(begin_cell()
-              .store_uint(101011200444200, 80)
+              .store_uint(101011200444200, 82)
+              .store_ref(begin_cell()
+                .store_uint(555300, 83)
+                  .store_ref(begin_cell()
+                    .store_uint(555300, 83)
+                    .store_ref(begin_cell()
+                      .store_uint(555300, 83)
+                      .store_ref(begin_cell()
+                        .store_uint(101110101101110101101110101101110101, 128)
+                      .end_cell())
+                    .end_cell())
+                  .end_cell())
+              .end_cell())
             .end_cell())
         .end_cell())
     .end_cell();-}
+  cell linked_list = begin_cell()
+        .store_uint(1291, 11)
+        .store_ref(begin_cell()
+            .store_uint(10815, 14)
+            .end_cell())
+        .end_cell();
         
   tuple stack = null();
   stack~push_back(linked_list);
@@ -217,68 +268,60 @@ builder store_ref(builder b, cell c) asm(c b) "STREF";
       if (s.slice_empty?()) {
         lock = 0;
       } else {
-        int b = slice_bits(s);
-        slice cell_value = int_to_string(s~load_uint(b));
+        ;;int b = slice_bits(s);
+        slice cell_value = dec2bin(s~load_uint(slice_bits(s)));
         lens~tpush(slen(cell_value));
-        bits~tpush(b);
+        ;;bits~tpush(b);
         res = add_slice(res, cell_value);
       }
     }
   }
 
+  ;; bin
   res = replace_all(res, fl, val);
 
   builder result_list = begin_cell();
-  {-result_list = result_list.store_uint(1, 32);
-  cell c = begin_cell().store_uint(2, 32).end_cell();
-  result_list = result_list.store_ref(c);
-
-  cell c1 = result_list.end_cell();
-
-  builder result = begin_cell().store_uint(3, 32);
-  result = result.store_ref(c1);
-  cell c2 = result.end_cell();-}
 
   lens = reverse_tuple(lens);
-  bits = reverse_tuple(bits);
+  ;;bits = reverse_tuple(bits);
 
   int l = lens.at(0);
-  int b = bits.at(0);
+  ;;int b = bits.at(0);
 
   int lll = slen(res);
 
-  ;;int s = string_to_int(get_substring(res, 0, l));
-  int s = string_to_int(get_substring(res, lll - l, l));
-  result_list = result_list.store_uint(s, b);
+  slice s = get_substring(res, lll - l, l);
+  result_list = result_list.store_uint(bin2dec(s), slen(s));
 
   int i = 1;
   cell c_r = null();
   repeat (lens.tlen() - 1) {
     l += lens.at(i);
-    ;;s = string_to_int(get_substring(res, l + 1, lens.at(i) - 1));
-    s = string_to_int(get_substring(res, (lll - l) + 1, lens.at(i) - 1));
+    s = get_substring(res, (lll - l) + 1, lens.at(i) - 1);
 
     if (c_r.is_null()) {
       c_r = result_list.end_cell();
 
       c_r = begin_cell()
-                .store_uint(s, bits.at(i))
+                .store_uint(bin2dec(s), slen(s))
                 .store_ref(c_r)
               .end_cell();
     }
     else {
       c_r = begin_cell()
-              .store_uint(s, bits.at(i))
+              .store_uint(bin2dec(s), slen(s))
               .store_ref(c_r)
             .end_cell();
     }
-
-    ;; l += lens.at(i);
 
     i += 1;
   }
 
   ;;slice kk = c_r.begin_parse();
+
+  ;;cell t = kk~load_ref();
+
+  ;;slice kk1 = t.begin_parse();
 
   {-
   lens
