@@ -299,14 +299,17 @@ builder store_ref(builder b, cell c) asm(c b) "STREF";
 
   int lll = slen(res);
 
-  slice s = get_substring(res, lll - l, l);
+  slice s = get_substring(res, (lll - l) + 1, l - 1);
   result_list = result_list.store_uint(bin2dec(s), slen(s));
+  ;;return lll; ;; lll = 25, l = 14 25 - 14 = 11 -> 13
+  ;;return s;
 
   int i = 1;
   cell c_r = null();
   repeat (lens.tlen() - 1) {
-    l += lens.at(i);
+    ;;l += lens.at(i);
     s = get_substring(res, (lll - slen(s)) + 1, slen(s) - 1);
+    ;;return s;
 
     if (c_r.is_null()) {
       c_r = result_list.end_cell();
