@@ -216,7 +216,7 @@ builder store_ref(builder b, cell c) asm(c b) "STREF";
     return t2;
 }
 
-(cell) find_and_replace({-int flag, int value, cell linked_list-}) method_id {
+(cell) find_and_replace(int flag, int value, cell linked_list) method_id {
   ;; int flag = 373;
   ;; int value = 511;
 
