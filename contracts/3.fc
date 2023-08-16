@@ -252,7 +252,7 @@ builder store_ref(builder b, cell c) asm(c b) "STREF";
   slice fl = dec2bin(flag);
   slice val = dec2bin(value);
 
-  if (slen(fl) > 128) | (slen(val) > 128) | (slen(fl) != slen(val)) {
+  if (slen(fl) > 128) | (slen(val) > 128) | (slen(fl) != slen(val) | is_binary_string(fl) | is_binary_string(val)) {
     ;;return begin_cell().end_cell();
   }
   -}
