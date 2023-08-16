@@ -227,6 +227,10 @@ builder store_ref(builder b, cell c) asm(c b) "STREF";
   slice fl = dec2bin(flag);
   slice val = dec2bin(value);
 
+  if (slen(flag) > 128) | (slen(value) > 128) {
+    return begin_cell().end_cell();
+  }
+
   ;; 1011101011011101011200444200555300
   {-cell linked_list = begin_cell()
         .store_uint(101110101101110101101110101101110101, 81)
