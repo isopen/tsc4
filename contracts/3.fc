@@ -288,13 +288,15 @@ builder store_ref(builder b, cell c) asm(c b) "STREF";
 
   ;; bin
   res = replace_all(res, fl, val);
+  ;;return res;
 
   builder result_list = begin_cell();
 
   lens = reverse_tuple(lens);
   ;;bits = reverse_tuple(bits);
 
-  int l = lens.at(0);
+  int l = lens.at(0); ;; 14
+  ;;return l;
   ;;int b = bits.at(0);
 
   int lll = slen(res);
@@ -302,14 +304,15 @@ builder store_ref(builder b, cell c) asm(c b) "STREF";
   slice s = get_substring(res, (lll - l) + 1, l - 1);
   result_list = result_list.store_uint(bin2dec(s), slen(s));
   ;;return lll; ;; lll = 25, l = 14 25 - 14 = 11 -> 13
-  ;;return s;
+  ;;return bin2dec(s);
 
   int i = 1;
   cell c_r = null();
+  int tmp = 0;
   repeat (lens.tlen() - 1) {
-    ;;l += lens.at(i);
-    s = get_substring(res, (lll - slen(s)) + 1, slen(s) - 1);
-    ;;return s;
+    tmp = l;
+    l += lens.at(i);
+    s = get_substring(res, lll - l, lens.at(i));
 
     if (c_r.is_null()) {
       c_r = result_list.end_cell();
