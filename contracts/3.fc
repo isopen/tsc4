@@ -207,6 +207,15 @@ builder store_ref(builder b, cell c) asm(c b) "STREF";
     return dn;
 }
 
+(tuple) reverse_tuple(tuple t1) {
+    tuple t2 = empty_tuple();
+    repeat (t1.tlen()) {
+        var value = t1~tpop();
+        t2~tpush(value);
+    }
+    return t2;
+}
+
 (cell) find_and_replace({-int flag, int value, cell linked_list-}) method_id {
   int flag = 373;
   int value = 511;
