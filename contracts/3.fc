@@ -141,7 +141,7 @@ builder store_ref(builder b, cell c) asm(c b) "STREF";
   int ls = slen(s);
   slice r = get_substring(s, 0, lf);
   int i = lf + 1;
-  if (is_equalstring(s, f)) {
+  if (is_equalstring(r, f)) {
     r = v;
   }
   else {
