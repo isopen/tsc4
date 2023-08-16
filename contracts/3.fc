@@ -382,7 +382,7 @@ builder store_ref(builder b, cell c) asm(c b) "STREF";
 
   slice kk2 = t.begin_parse();
 
-  return kk~load_uint(11);-}
+  return kk~load_uint(11); -}
 
   return c_r;
 }
