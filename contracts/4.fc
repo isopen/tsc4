@@ -12,7 +12,6 @@
 ;; testable
 (cell) caesar_cipher_encrypt(int shift, cell text) method_id {
   slice string = text.begin_parse();
-  string.load_uint(32);
 
   builder result = begin_cell();
   while (~ slice_data_empty?(string)) {
@@ -37,7 +36,6 @@
 ;; testable
 (cell) caesar_cipher_decrypt(int shift, cell text) method_id {
   slice string = text.begin_parse();
-  string.load_uint(32);
 
   builder result = begin_cell();
   while (~ slice_data_empty?(string)) {
