@@ -182,6 +182,11 @@ builder store_ref(builder b, cell c) asm(c b) "STREF";
 
 (slice) dec2bin(int dn) {
   slice bn = "";
+
+  if (dn == 0) {
+    return "0";
+  }
+
   while (dn > 0) {
     int r = dn % 2;
     bn = add_slice(int_to_string(r), bn);
