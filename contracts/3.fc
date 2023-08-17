@@ -230,9 +230,9 @@ builder store_ref(builder b, cell c) asm(c b) "STREF";
 }
 
 (cell) find_and_replace(int flag, int value, cell linked_list) method_id {
-  if (flag <= 0) | (value <= 0) {
+  {-if (flag <= 0) | (value <= 0) {
     return begin_cell().end_cell();
-  }
+  }-}
 
   slice fl = dec2bin(flag);
   slice val = dec2bin(value);
