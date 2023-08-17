@@ -20,7 +20,7 @@ forall X -> (tuple, (X)) pop_back (tuple t) asm "UNCONS";
   tuple stack = null();
   stack~push_back(tree);
   int len = stack.tlen();
-  repeat (len) {
+  repeat (stack.tlen()) {
     cell cs = stack~pop_back();
 
     if (hash == cs.cell_hash()) {
@@ -31,7 +31,6 @@ forall X -> (tuple, (X)) pop_back (tuple t) asm "UNCONS";
 
     repeat (s.slice_refs()) {
       stack~push_back(s~load_ref());
-      len += 1;
     }
   }
 
