@@ -230,9 +230,9 @@ builder store_ref(builder b, cell c) asm(c b) "STREF";
 }
 
 (cell) find_and_replace(int flag, int value, cell linked_list) method_id {
-  {-if (flag <= 0) | (value <= 0) {
+  if (flag <= 0) | (value <= 0) {
     return begin_cell().end_cell();
-  }-}
+  }
 
   slice fl = dec2bin(flag);
   slice val = dec2bin(value);
@@ -241,56 +241,8 @@ builder store_ref(builder b, cell c) asm(c b) "STREF";
     return begin_cell().end_cell();
   }
 
-  {-
-  int flag = 373;
-  int value = 511;
-
-  if (flag <= 0) | (value <= 0) {
-    ;;return begin_cell().end_cell();
-  }
-
-  slice fl = dec2bin(flag);
-  slice val = dec2bin(value);
-
-  if (slen(fl) > 128) | (slen(val) > 128) | (slen(fl) != slen(val)) {
-    ;;return begin_cell().end_cell();
-  }
-  -}
-
-  ;;fl = int_to_string(flag);
-  ;;val = int_to_string(value);
-
-  ;; 1011101011011101011200444200555300
-  {-cell linked_list = begin_cell()
-        .store_uint(10111010110111010, 128)
-        .store_ref(begin_cell()
-            .store_uint(1011, 80)
-            .store_ref(begin_cell()
-              .store_uint(101011200444200, 128)
-              .store_ref(begin_cell()
-                .store_uint(555300, 128)
-                  .store_ref(begin_cell()
-                    .store_uint(555300, 128)
-                    .store_ref(begin_cell()
-                      .store_uint(555300, 128)
-                      .store_ref(begin_cell()
-                        .store_uint(101110101101110101, 128)
-                      .end_cell())
-                    .end_cell())
-                  .end_cell())
-              .end_cell())
-            .end_cell())
-        .end_cell())
-    .end_cell();-}
-  {-cell linked_list = begin_cell()
-        .store_uint(1291, 11)
-        .store_ref(begin_cell()
-            .store_uint(10815, 14)
-              .store_ref(begin_cell()
-                .store_uint(0, 3)
-              .end_cell())
-            .end_cell())
-        .end_cell();-}
+  fl = int_to_string(flag);
+  val = int_to_string(value);
         
   tuple stack = null();
   stack~push_back(linked_list);
@@ -313,9 +265,9 @@ builder store_ref(builder b, cell c) asm(c b) "STREF";
     }
   }
 
-  if (is_binary_string(res)) {
-    return begin_cell().end_cell();
-  }
+  ;;if (is_binary_string(res)) {
+  ;;  return begin_cell().end_cell();
+  ;;}
 
   res = replace_all(res, fl, val);
 
@@ -324,17 +276,11 @@ builder store_ref(builder b, cell c) asm(c b) "STREF";
   lens = reverse_tuple(lens);
   bits = reverse_tuple(bits);
 
-  int l = lens.at(0); ;; 14
-  ;;return int_to_string(l);
-  int b = bits.at(0);
+  int l = lens.at(0);
 
   int lll = slen(res);
-  ;;return int_to_string(lll);
-  ;;45-14=32 -> 13
 
   slice s = get_substring(res, (lll - l) + 1, l - 1);
-  ;; 000000011110b1
-  ;;return s;
   cell c_r = result_list.store_slice(s).end_cell();
 
   int i = 1;
@@ -349,18 +295,6 @@ builder store_ref(builder b, cell c) asm(c b) "STREF";
 
     i += 1;
   }
-
-  {-slice kk = c_r.begin_parse();
-
-  cell t = kk~load_ref();
-
-  slice kk1 = t.begin_parse();
-
-  cell t1 = kk1~load_ref();
-
-  slice kk2 = t.begin_parse();
-
-  return kk~load_uint(11);-}
 
   return c_r;
 }
