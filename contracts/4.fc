@@ -9,12 +9,17 @@
 () recv_internal() {
 }
 
+(int) slen(slice s) {
+  return slice_bits(s) / 8;
+}
+
 ;; testable
 (cell) caesar_cipher_encrypt(int shift, cell text) method_id {
   slice string = text.begin_parse();
 
   builder result = begin_cell();
-  while (~ slice_data_empty?(string)) {
+  int sn = slen(string);
+  repeat (sn) {
     int ch = string~load_uint(8);
     if (ch >= 65) & (ch <= 90) {
         result = result.store_uint(((ch - 65 + shift) % 26) + 65, 8);
