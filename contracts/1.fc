@@ -19,8 +19,7 @@ forall X -> (tuple, (X)) pop_back (tuple t) asm "UNCONS";
   if (hash == tree.cell_hash()) {
     return tree;
   }
-  tuple stack = null();
-  stack~push_back(tree);
+  tuple stack = stack~push_back(tree);
   while (~ stack.is_null()) {
     cell cs = stack~pop_back();
 
