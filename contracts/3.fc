@@ -325,39 +325,27 @@ builder store_ref(builder b, cell c) asm(c b) "STREF";
   bits = reverse_tuple(bits);
 
   int l = lens.at(0); ;; 14
-  ;;return l;
+  ;;return int_to_string(l);
   int b = bits.at(0);
 
   int lll = slen(res);
+  ;;return int_to_string(lll);
+  ;;45-14=32 -> 13
 
   slice s = get_substring(res, (lll - l) + 1, l - 1);
-  result_list = result_list.store_slice(s);
-  ;;return lll;
-  ;;return bits.at(2);
+  ;; 000000011110b1
+  ;;return s;
+  cell c_r = result_list.store_slice(s).end_cell();
 
   int i = 1;
-  cell c_r = null();
   repeat (lens.tlen() - 1) {
     l += lens.at(i);
     s = get_substring(res, (lll - l) + 1, lens.at(i) - 1);
-    ;;return bin2dec(s);
 
-    if (c_r.is_null()) {
-      ;;return bin2dec(s);
-      c_r = result_list.end_cell();
-
-      c_r = begin_cell()
-                .store_slice(s)
-                .store_ref(c_r)
-              .end_cell();
-    }
-    else {
-      ;;return bin2dec(s);
-      c_r = begin_cell()
-              .store_slice(s)
-              .store_ref(c_r)
-            .end_cell();
-    }
+    c_r = begin_cell()
+            .store_slice(s)
+          .store_ref(c_r)
+    .end_cell();
 
     i += 1;
   }
