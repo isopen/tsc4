@@ -314,7 +314,7 @@ builder store_ref(builder b, cell c) asm(c b) "STREF";
   }
 
   if (is_binary_string(res)) {
-    ;;return begin_cell().end_cell();
+    return begin_cell().end_cell();
   }
 
   res = replace_all(res, fl, val);
