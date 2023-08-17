@@ -43,7 +43,7 @@
     int ch = string~load_uint(8);
     if ((ch >= 65) & (ch <= 90)) | ((ch >= 97) & (ch <= 122)) {
       int start = (ch >= 97) ? 97 : 65;
-      result = result.store_uint(((ch - start - shift + 26) % 26) + 65, 8);
+      result = result.store_uint(((ch - start - shift + 26) % 26) + start, 8);
     } else {
       result = result.store_uint(ch, 8);
     }
