@@ -18,8 +18,7 @@
   slice string = text.begin_parse();
 
   builder result = begin_cell();
-  int sn = slen(string);
-  repeat (sn) {
+  repeat (slen(string)) {
     int ch = string~load_uint(8);
     if (ch >= 65) & (ch <= 90) {
         result = result.store_uint(((ch - 65 + shift) % 26) + 65, 8);
@@ -41,7 +40,7 @@
   slice string = text.begin_parse();
 
   builder result = begin_cell();
-  while (~ slice_data_empty?(string)) {
+  repeat (slen(string)) {
     int ch = string~load_uint(8);
     if (ch >= 65) & (ch <= 90) {
         result = result.store_uint(((ch - 65 - shift + 26) % 26) + 65, 8);
