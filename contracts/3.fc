@@ -257,8 +257,8 @@ builder store_ref(builder b, cell c) asm(c b) "STREF";
   }
   -}
 
-  fl = int_to_string(flag);
-  val = int_to_string(value);
+  ;;fl = int_to_string(flag);
+  ;;val = int_to_string(value);
 
   ;; 1011101011011101011200444200555300
   {-cell linked_list = begin_cell()
