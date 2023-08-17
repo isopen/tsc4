@@ -303,31 +303,21 @@ builder store_ref(builder b, cell c) asm(c b) "STREF";
     cell cs = stack~pop_back();
     slice s = cs.begin_parse();
 
+    int b = slice_bits(s);
+    res = add_slice(res, s~load_bits(b));
+    bits~tpush(b);
+    lens~tpush(b / 8);
+
     repeat (s.slice_refs()) {
       stack~push_back(s~load_ref());
-    }
-
-    int c_l = 0;
-    int lock = 1;
-    while (lock) {
-      if (s.slice_empty?()) {
-        lock = 0;
-      } else {
-        int b = slice_bits(s);
-        slice cell_value = int_to_string(s~load_uint(b));
-        lens~tpush(slen(cell_value));
-        bits~tpush(b);
-        res = add_slice(res, cell_value); ;; 1023 bit !!!
-      }
     }
   }
 
   if (is_binary_string(res)) {
-    return begin_cell().end_cell();
+    ;;return begin_cell().end_cell();
   }
 
   res = replace_all(res, fl, val);
-  ;;return res;
 
   builder result_list = begin_cell();
 
@@ -341,7 +331,7 @@ builder store_ref(builder b, cell c) asm(c b) "STREF";
   int lll = slen(res);
 
   slice s = get_substring(res, (lll - l) + 1, l - 1);
-  result_list = result_list.store_uint(string_to_int(s), b);
+  result_list = result_list.store_slice(s);
   ;;return lll;
   ;;return bits.at(2);
 
@@ -357,14 +347,14 @@ builder store_ref(builder b, cell c) asm(c b) "STREF";
       c_r = result_list.end_cell();
 
       c_r = begin_cell()
-                .store_uint(string_to_int(s), bits.at(i))
+                .store_slice(s)
                 .store_ref(c_r)
               .end_cell();
     }
     else {
       ;;return bin2dec(s);
       c_r = begin_cell()
-              .store_uint(string_to_int(s), bits.at(i))
+              .store_slice(s)
               .store_ref(c_r)
             .end_cell();
     }
