@@ -18,7 +18,8 @@ forall X -> (tuple, (X)) pop_back (tuple t) asm "UNCONS";
 (cell) find_branch_by_hash(int hash, cell tree) method_id {
   tuple stack = null();
   stack~push_back(tree);
-  while (~ stack.is_null()) {
+  int len = stack.tlen();
+  repeat (len) {
     cell cs = stack~pop_back();
 
     if (hash == cs.cell_hash()) {
@@ -29,6 +30,7 @@ forall X -> (tuple, (X)) pop_back (tuple t) asm "UNCONS";
 
     repeat (s.slice_refs()) {
       stack~push_back(s~load_ref());
+      len += 1;
     }
   }
 
