@@ -237,7 +237,7 @@ builder store_ref(builder b, cell c) asm(c b) "STREF";
   slice fl = dec2bin(flag);
   slice val = dec2bin(value);
 
-  if (slen(fl) >= 128) | (slen(val) >= 128)) {
+  if (slen(fl) >= 128) | (slen(val) >= 128) {
     return begin_cell().end_cell();
   }
 
