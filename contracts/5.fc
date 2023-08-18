@@ -23,6 +23,11 @@
   }
 
   tuple fib = empty_tuple();
+
+  if (n == 0) | (k == 0) {
+    return fib~tpush(0);
+  }
+
   int f0 = 0;
   int f1 = 1;
   int i = 0;
