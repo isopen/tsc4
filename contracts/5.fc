@@ -25,7 +25,8 @@
   tuple fib = empty_tuple();
 
   if (n == 0) | (k == 0) {
-    return fib~tpush(0);
+    fib~tpush(0)
+    return fib;
   }
 
   int f0 = 0;
