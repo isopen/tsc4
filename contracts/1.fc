@@ -16,20 +16,14 @@ forall X -> (tuple, (X)) pop_back (tuple t) asm "UNCONS";
 
 ;; testable
 (cell) find_branch_by_hash(int hash, cell tree) method_id {
-  if (hash == tree.cell_hash()) {
-    return tree;
-  }
   tuple stack = null();
   stack~push_back(tree);
   while (~ stack.is_null()) {
     cell cs = stack~pop_back();
-
     if (hash == cs.cell_hash()) {
       return cs;
     }
-
     slice s = cs.begin_parse();
-
     repeat (s.slice_refs()) {
       stack~push_back(s~load_ref());
     }
